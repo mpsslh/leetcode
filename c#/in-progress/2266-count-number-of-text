@@ -1,0 +1,28 @@
+public class Solution {
+    public int CountTexts(string pressedKeys) {
+        var groups = pressedKeys.GroupBy(c => c)
+            .Select(g => new { Letter = g.Key, Count = g.Count() });
+        
+        int totalCount = 1;
+
+        //a 2^0
+        //aa b 2^1
+        //aaa,ab, ba, c 2^2 
+        //aaaa, ac, aab, aba, bb, baa, ca 2^3 - 1
+        //aaaaa, aac, aca, caa, aaab, aaba, abaa, baaa, aabb, abba, bbaa, bbb, bc, cb, 2^4 -1
+        foreach(var g in groups){
+            int count = g.Count;
+            while(count > 0){
+                if(count > 2){
+                    count = count - 3; 
+                    totalCount *= 4; //This value is wrong
+                }
+                else{
+                    totalCount *= count; //This value is wrong
+                    count = 0;
+                }
+            }
+        }
+        return totalCount % 1000000007;
+    }
+}
