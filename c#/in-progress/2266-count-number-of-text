@@ -1,28 +1,25 @@
-public class Solution {
-    public int CountTexts(string pressedKeys) {
-        var groups = pressedKeys.GroupBy(c => c)
-            .Select(g => new { Letter = g.Key, Count = g.Count() });
-        
-        int totalCount = 1;
 
-        //a 2^0
-        //aa b 2^1
-        //aaa,ab, ba, c 2^2 
-        //aaaa, ac, aab, aba, bb, baa, ca 2^3 - 1
-        //aaaaa, aac, aca, caa, aaab, aaba, abaa, baaa, aabb, abba, bbaa, bbb, bc, cb, 2^4 -1
-        foreach(var g in groups){
-            int count = g.Count;
-            while(count > 0){
-                if(count > 2){
-                    count = count - 3; 
-                    totalCount *= 4; //This value is wrong
-                }
-                else{
-                    totalCount *= count; //This value is wrong
-                    count = 0;
-                }
+//failing test 58/107
+public class Solution {
+    //Start with dp[0] = 1
+    //every dp[n] is adds to dp[!(n-1)] factorial
+    public int CountTexts(string pressedKeys) {        
+        int mod = ((int)1e9) + 7;
+        int[] counts = new int[pressedKeys.Length+1];
+        Array.Fill(counts,0);
+        counts[0] = 1;
+        for(int i = 0; i< pressedKeys.Length; i++){
+            for (int j = 1; j <= threeOrFour(pressedKeys[i]); j++) { // Loop through possible length of substrings
+                int len = i - j + 1; // calculate length of substring
+                if (len < 0 || pressedKeys[i] != pressedKeys[len]) break; // Break if length is invalid or characterdoesnt match
+                counts[i + 1] += counts[i + 1 - j]; // update count for current position
             }
+        counts[i + 1] %= mod; // Apply modulo after each iteration
         }
-        return totalCount % 1000000007;
+
+        int threeOrFour(char c){
+            return (c == '7' || c == '9') ? 4 : 3; 
+        }
+        return counts[pressedKeys.Length] % mod; 
     }
 }
