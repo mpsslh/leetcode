@@ -1,0 +1,15 @@
+public class Solution {
+    public int PassThePillow(int n, int time) {
+        int rounds = 0;
+        if(time>n){
+            time = time-rounds*n;
+            rounds = time%n;
+        }
+        if(rounds%2 == 1){
+            return time+1;
+        }
+        else{
+            return n-(time-n)-1;
+        }
+    }
+}

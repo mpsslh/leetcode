@@ -1,0 +1,25 @@
+
+//failing test 58/107
+public class Solution {
+    //Start with dp[0] = 1
+    //every dp[n] is adds to dp[!(n-1)] factorial
+    public int CountTexts(string pressedKeys) {        
+        int mod = ((int)1e9) + 7;
+        int[] counts = new int[pressedKeys.Length+1];
+        Array.Fill(counts,0);
+        counts[0] = 1;
+        for(int i = 0; i< pressedKeys.Length; i++){
+            for (int j = 1; j <= threeOrFour(pressedKeys[i]); j++) { // Loop through possible length of substrings
+                int len = i - j + 1; // calculate length of substring
+                if (len < 0 || pressedKeys[i] != pressedKeys[len]) break; // Break if length is invalid or characterdoesnt match
+                counts[i + 1] += counts[i + 1 - j]; // update count for current position
+            }
+        counts[i + 1] %= mod; // Apply modulo after each iteration
+        }
+
+        int threeOrFour(char c){
+            return (c == '7' || c == '9') ? 4 : 3; 
+        }
+        return counts[pressedKeys.Length] % mod; 
+    }
+}
