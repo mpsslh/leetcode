@@ -1,0 +1,20 @@
+public class Solution {
+    public string GreatestLetter(string s) {
+        string r = null;
+        //2 mark
+        HashSet<char> hs = new();
+        foreach(var c in s){
+            if(!hs.Contains(c)){
+                hs.Add(c);
+            }
+
+            if(hs.Contains(char.ToUpper(c)) && hs.Contains(char.ToLower(c))){
+                if(r is null || string.Compare(r,c.ToString()) < 0){
+                    r = c.ToString();
+                }
+            }
+        }
+
+        return r is null ? String.Empty : r.ToUpper();
+    }
+}
